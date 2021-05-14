@@ -1,4 +1,5 @@
-import { ADD, DECREMENT, INCREMENT, SUBTRACT, STORE_RESULT, DELETE_RESULT, SET_TOKEN } from './actionTypes';
+import { ADD, DECREMENT, INCREMENT, SUBTRACT, STORE_RESULT, DELETE_RESULT, SET_TOKEN, LOGIN } from './actionTypes';
+import { bool } from 'yup';
 
 export const increment = () => {
   return {
@@ -52,5 +53,12 @@ export const setToken = (token: string) => {
   return {
     type: SET_TOKEN,
     token: token,
+  };
+};
+
+export const setLoggedIn = (loggedIn: boolean) => {
+  return {
+    type: LOGIN,
+    loggedIn: loggedIn,
   };
 };

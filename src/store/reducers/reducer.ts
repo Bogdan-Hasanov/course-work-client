@@ -52,7 +52,7 @@ const reducer = (state = initialState, action: any) => {
     case Actions.LOGIN: {
       return {
         ...state,
-        loggedIn: true,
+        loggedIn: action.loggedIn,
       };
     }
     case Actions.SET_TOKEN: {

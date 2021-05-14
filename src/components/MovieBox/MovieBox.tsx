@@ -1,6 +1,6 @@
 import './MovieBox.scss';
 import React from 'react';
-import { MovieModel } from '../Models/MovieModel';
+import { MovieModel } from '../../Models/MovieModel';
 
 interface MovieBoxProps {
   movie: MovieModel;

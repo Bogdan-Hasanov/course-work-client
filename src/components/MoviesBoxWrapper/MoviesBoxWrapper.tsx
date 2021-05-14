@@ -2,7 +2,7 @@ import './MoviesBoxWrapper.scss';
 import React, { useEffect, useState } from 'react';
 import MovieBox from '../MovieBox/MovieBox';
 import axios from 'axios';
-import { MovieModel } from '../Models/MovieModel';
+import { MovieModel } from '../../Models/MovieModel';
 
 const moviesBoxWrapper = () => {
   const [movies, setMovies] = useState<MovieModel[]>([]);
