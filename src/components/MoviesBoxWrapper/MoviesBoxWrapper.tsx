@@ -3,14 +3,17 @@ import React, { useEffect, useState } from 'react';
 import MovieBox from '../MovieBox/MovieBox';
 import axios from 'axios';
 import { MovieModel } from '../../Models/MovieModel';
+import { connect } from 'react-redux';
 
-const moviesBoxWrapper = () => {
+const moviesBoxWrapper = (props: any) => {
   const [movies, setMovies] = useState<MovieModel[]>([]);
+  const [prevSearchTerm, setPrevSearchTerm] = useState<string>('');
 
   useEffect(() => {
-    if (movies.length === 0) {
+    if (prevSearchTerm !== props.searchTerm) {
+      setPrevSearchTerm(props.searchTerm);
       axios
-        .get<MovieModel[]>('https://localhost:5001/Movie/SendSearch/game')
+        .get<MovieModel[]>(`https://localhost:5001/Movie/SendSearch/${props.searchTerm}`)
         .then(response => setMovies(response.data));
     }
   });
@@ -24,4 +27,10 @@ const moviesBoxWrapper = () => {
   );
 };
 
-export default moviesBoxWrapper;
+const mapStateToProps = (state: any) => {
+  return {
+    searchTerm: state.searchTerm,
+  };
+};
+
+export default connect(mapStateToProps)(moviesBoxWrapper);

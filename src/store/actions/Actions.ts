@@ -1,5 +1,14 @@
-import { ADD, DECREMENT, INCREMENT, SUBTRACT, STORE_RESULT, DELETE_RESULT, SET_TOKEN, LOGIN } from './actionTypes';
-import { bool } from 'yup';
+import {
+  ADD,
+  DECREMENT,
+  INCREMENT,
+  SUBTRACT,
+  STORE_RESULT,
+  DELETE_RESULT,
+  SET_TOKEN,
+  LOGIN,
+  SET_SEARCH_TERM,
+} from './actionTypes';
 
 export const increment = () => {
   return {
@@ -60,5 +69,12 @@ export const setLoggedIn = (loggedIn: boolean) => {
   return {
     type: LOGIN,
     loggedIn: loggedIn,
+  };
+};
+
+export const setSearchTerm = (searchTerm: string) => {
+  return {
+    type: SET_SEARCH_TERM,
+    searchTerm: searchTerm,
   };
 };

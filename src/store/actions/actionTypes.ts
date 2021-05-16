@@ -6,3 +6,4 @@ export const STORE_RESULT = 'STORE_RESULT';
 export const DELETE_RESULT = 'DELETE_RESULT';
 export const LOGIN = 'LOGIN';
 export const SET_TOKEN = 'SET_TOKEN';
+export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';

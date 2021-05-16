@@ -6,6 +6,7 @@ const initialState = {
   results: [],
   loggedIn: false,
   token: null,
+  searchTerm: 'Game',
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -60,6 +61,12 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         token: action.token,
+      };
+    }
+    case Actions.SET_SEARCH_TERM: {
+      return {
+        ...state,
+        searchTerm: action.searchTerm,
       };
     }
     default:
