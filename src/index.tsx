@@ -10,6 +10,11 @@ import reducer from './store/reducers/reducer';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://localhost:5001';
+axios.interceptors.request.use(function (config) {
+  const token = store.getState().token;
+  config.headers.Authorization = 'Bearer ' + token;
+  return config;
+});
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

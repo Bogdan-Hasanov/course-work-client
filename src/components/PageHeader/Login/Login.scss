@@ -1,20 +1,24 @@
-.Login{
+.Login {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   font-size: 1.3rem;
   font-weight: bold;
   text-align: center;
-  &__buttons{
+  &__buttons {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin: 1rem;
-    & *{
+    & * {
       margin: 0.4rem;
     }
   }
 }
 
-.LoginWrapper{
+.LoginWrapper {
+  & p{
+    margin: 20px;
+    color: rgb(0,95,84);
+  }
 }

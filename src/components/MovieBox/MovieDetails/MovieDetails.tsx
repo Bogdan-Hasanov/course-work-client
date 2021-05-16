@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import axios from 'axios';
+import { UserInfo } from '../../../Models/UserInfo';
 
 interface MovieBoxProps {
   id: string;
@@ -26,23 +27,46 @@ interface MovieBoxProps {
 const movieDetails = (props: MovieBoxProps) => {
   // const [open, setOpen] = React.useState(false);
   const [movieDetails, setMovieDetails] = React.useState<MovieDetailsModel>();
+  const [userInfo, setUserInfo] = React.useState<UserInfo>();
 
   const handleOpen = () => {
     if (!movieDetails && props.show) {
-      console.log('sending axios' + props.show);
-      axios
-        .get<MovieDetailsModel>(`https://localhost:5001/Movie/GetMovieById/${encodeURIComponent(props.id)}`)
-        .then(response => {
-          setMovieDetails(response.data as MovieDetailsModel);
-        });
+      Promise.all([
+        axios.get<MovieDetailsModel>(`https://localhost:5001/Movie/GetMovieById/${encodeURIComponent(props.id)}`),
+        axios.get<UserInfo>(`https://localhost:5001/User`),
+      ]).then(responses => {
+        setMovieDetails(responses[0].data);
+        setUserInfo(responses[1].data as UserInfo);
+      });
     }
   };
+
+  useEffect(() => console.log('userInfo: ', userInfo?.movieMarks[props.id]), [userInfo]);
+
   useEffect(handleOpen, [props.show]);
+
+  const setRatingHandler = (event: any, value: number | null) => {
+    if (userInfo != undefined) {
+      if (userInfo.movieMarks == undefined) userInfo.movieMarks = {} as Record<string, number>;
+      userInfo.movieMarks[props.id] = value ?? 0;
+      axios.put(`https://localhost:5001/User`, userInfo).then(() => console.log('mark was set'));
+    }
+  };
 
   const handleClose = (event: any) => {
     if (event as React.MouseEvent<HTMLButtonElement, MouseEvent>) event.stopPropagation();
     props.setShow(false);
   };
+
+  const rating = (
+    <Rating
+      name="customized-10"
+      defaultValue={userInfo?.movieMarks != undefined ? userInfo?.movieMarks[props.id] ?? 0 : 0}
+      value={userInfo?.movieMarks[props.id]}
+      onChange={setRatingHandler}
+      max={10}
+    />
+  );
 
   let body;
   if (movieDetails !== undefined) {
@@ -59,7 +83,7 @@ const movieDetails = (props: MovieBoxProps) => {
         <p> {movieDetails.numberOfEpisodes ? 'Episodes ' + movieDetails.numberOfEpisodes : ''}</p>
         <Box component="fieldset" mb={3} borderColor="transparent">
           <Typography component="legend">Rate movie</Typography>
-          <Rating name="customized-10" defaultValue={2} max={10} />
+          {userInfo ? rating : null}
         </Box>
       </div>
     );

@@ -13,31 +13,41 @@ import {
   setLoggedIn,
   setToken,
 } from '../../../store/actions/Actions';
+import { UserInfo } from '../../../Models/UserInfo';
 
 const login = (props: any) => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
+  const [registerSuccessful, setRegisterSuccessful] = useState(false);
 
-  const error = <p>Login or password is invalid</p>;
+  const error = 'Login or password is invalid';
+  const register = 'Registration was successful';
   const loginButtonHandler = (event: any) => {
-    axios
+    return axios
       .post('/Auth/Login', { username: username, password: password })
       .then(r => {
         props.setLoggedInState(true);
-        props.setToken(r.data);
+        props.setToken(r.data.token);
         setLoginFailed(false);
+        setRegisterSuccessful(false);
       })
       .catch(reason => setLoginFailed(true));
   };
 
   const registerButtonHandler = (event: any) => {
-    axios
-      .post('/Auth/Register', { username: username, password: password, email: username + 'gmail.com' })
-      .then(r => console.log(r))
-      .catch(reason => setLoginFailed(true));
+    axios.post('/Auth/Register', { username: username, password: password, email: username + 'gmail.com' }).then(r => {
+      setLoginFailed(false);
+      setRegisterSuccessful(true);
+      loginButtonHandler(null)
+        .then(() => {
+          axios
+            .put('/User', { userId: username + 'gmail.com', movieMarks: {} } as UserInfo)
+            .then(r => console.log('r: ', r));
+        })
+        .catch(reason => setLoginFailed(true));
+    });
   };
-  console.log(props);
   return (
     <div className="LoginWrapper">
       {props.loggedIn ? (
@@ -89,7 +99,8 @@ const login = (props: any) => {
           </div>
         </div>
       )}
-      {loginFailed ? error : null}
+      {loginFailed ? alert(error) : null}
+      {registerSuccessful ? alert(register) : null}
     </div>
   );
 };
