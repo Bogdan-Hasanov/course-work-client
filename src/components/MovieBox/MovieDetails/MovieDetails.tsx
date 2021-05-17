@@ -31,13 +31,19 @@ const movieDetails = (props: MovieBoxProps) => {
 
   const handleOpen = () => {
     if (!movieDetails && props.show) {
-      Promise.all([
-        axios.get<MovieDetailsModel>(`https://localhost:5001/Movie/GetMovieById/${encodeURIComponent(props.id)}`),
-        axios.get<UserInfo>(`https://localhost:5001/User`),
-      ]).then(responses => {
-        setMovieDetails(responses[0].data);
-        setUserInfo(responses[1].data as UserInfo);
-      });
+      axios
+        .get<MovieDetailsModel>(`https://localhost:5001/Movie/GetMovieById/${encodeURIComponent(props.id)}`)
+        .then(response => {
+          setMovieDetails(response.data);
+        });
+      axios
+        .get<UserInfo>(`https://localhost:5001/User`)
+        .then(response => {
+          setUserInfo(response.data as UserInfo);
+        })
+        .catch(error => {
+          console.log('error: ', error);
+        });
     }
   };
 
@@ -81,10 +87,12 @@ const movieDetails = (props: MovieBoxProps) => {
             : `Years (${movieDetails.seriesStartYear} - ${movieDetails.seriesEndYear})`}
         </p>
         <p> {movieDetails.numberOfEpisodes ? 'Episodes ' + movieDetails.numberOfEpisodes : ''}</p>
-        <Box component="fieldset" mb={3} borderColor="transparent">
-          <Typography component="legend">Rate movie</Typography>
-          {userInfo ? rating : null}
-        </Box>
+        {userInfo ? (
+          <Box component="fieldset" mb={3} borderColor="transparent">
+            <Typography component="legend">Rate movie</Typography>
+            {rating}
+          </Box>
+        ) : null}
       </div>
     );
   } else {
@@ -97,9 +105,6 @@ const movieDetails = (props: MovieBoxProps) => {
 
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button>
       <Dialog
         open={props.show}
         onClose={handleClose}

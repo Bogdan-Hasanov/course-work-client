@@ -20,6 +20,7 @@ const login = (props: any) => {
   const [username, setUsername] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
   const [registerSuccessful, setRegisterSuccessful] = useState(false);
+  const [messageWasShown, setMessageWasShown] = React.useState(true);
 
   const error = 'Login or password is invalid';
   const register = 'Registration was successful';
@@ -32,7 +33,23 @@ const login = (props: any) => {
         setLoginFailed(false);
         setRegisterSuccessful(false);
       })
-      .catch(reason => setLoginFailed(true));
+      .catch(reason => setLoginFailed(true))
+      .finally(() => {
+        setMessageWasShown(false);
+      });
+  };
+
+  const onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      loginButtonHandler(null).then(() => console.log('logged in'));
+    }
+  };
+
+  const handleAlert = (message: string) => {
+    if (!messageWasShown) {
+      alert(message);
+      setMessageWasShown(true);
+    }
   };
 
   const registerButtonHandler = (event: any) => {
@@ -46,12 +63,13 @@ const login = (props: any) => {
             .then(r => console.log('r: ', r));
         })
         .catch(reason => setLoginFailed(true));
+      setMessageWasShown(false);
     });
   };
   return (
     <div className="LoginWrapper">
       {props.loggedIn ? (
-        <p>Hi {username}</p>
+        <p>Logged in as {username}</p>
       ) : (
         <div className="Login">
           <div className="Login__inputs">
@@ -73,6 +91,7 @@ const login = (props: any) => {
               onChange={event => {
                 setPassword(event.target.value);
               }}
+              onKeyUp={onKeyUp}
             />
           </div>
           <div className="Login__buttons">
@@ -99,8 +118,8 @@ const login = (props: any) => {
           </div>
         </div>
       )}
-      {loginFailed ? alert(error) : null}
-      {registerSuccessful ? alert(register) : null}
+      {loginFailed ? handleAlert(error) : null}
+      {registerSuccessful ? handleAlert(register) : null}
     </div>
   );
 };
