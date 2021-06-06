@@ -6,7 +6,7 @@ const initialState = {
   results: [],
   loggedIn: false,
   token: null,
-  searchTerm: 'Game',
+  searchTerm: 'fall',
 };
 
 const reducer = (state = initialState, action: any) => {

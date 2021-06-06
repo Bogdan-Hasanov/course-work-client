@@ -79,12 +79,16 @@ const movieDetails = (props: MovieBoxProps) => {
     body = (
       <div className={'MovieDetails'}>
         <h2 id="simple-modal-title">
-          <img src={movieDetails.image.url} alt="Movie image" />
+          {movieDetails.image ? (
+            <img src={movieDetails.image.url} alt="Movie image" />
+          ) : (
+            <img src="/public/movieplaceholder.png" alt="Movie image" />
+          )}
         </h2>
         <p id="simple-modal-description">
           {movieDetails.seriesStartYear == null
             ? 'Year ' + movieDetails.year
-            : `Years (${movieDetails.seriesStartYear} - ${movieDetails.seriesEndYear})`}
+            : `Years (${movieDetails.seriesStartYear} - ${movieDetails.seriesEndYear ?? 'Present'})`}
         </p>
         <p> {movieDetails.numberOfEpisodes ? 'Episodes ' + movieDetails.numberOfEpisodes : ''}</p>
         {userInfo ? (
