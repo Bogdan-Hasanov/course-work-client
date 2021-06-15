@@ -1,8 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import MoviesBoxWrapper from 'components/MoviesBoxWrapper/MoviesBoxWrapper';
 import AppHeader from './components/PageHeader/Header';
+import MovieSlider from './components/MovieSlider/MovieSlider';
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
       </header>
       <body>
         <MoviesBoxWrapper />
+        <MovieSlider />
       </body>
     </div>
   );

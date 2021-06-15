@@ -1,11 +1,21 @@
-import './MoviesBoxWrapper.scss';
 import React, { useEffect, useState } from 'react';
-import MovieBox from '../MovieBox/MovieBox';
+import Slider from 'react-slick';
+import './MovieSlider.scss';
+import 'slick-carousel/slick/slick.scss';
+import 'slick-carousel/slick/slick-theme.scss';
 import axios from 'axios';
 import { MovieModel } from '../../Models/MovieModel';
+import MovieBox from '../MovieBox/MovieBox';
 import { connect } from 'react-redux';
 
-const moviesBoxWrapper = (props: any) => {
+const MovieSlider = (props: any) => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+  };
   const [movies, setMovies] = useState<MovieModel[]>([]);
   const [prevSearchTerm, setPrevSearchTerm] = useState<string>('');
 
@@ -17,12 +27,14 @@ const moviesBoxWrapper = (props: any) => {
         .then(response => setMovies(response.data));
     }
   });
-
   return (
-    <div className="MoviesBoxWrapper">
-      {movies.map(movie => (
-        <MovieBox key={movie.id} movie={movie} />
-      ))}
+    <div>
+      <h2> Movies with slider</h2>
+      <Slider {...settings}>
+        {movies.map(movie => (
+          <MovieBox key={movie.id} movie={movie} />
+        ))}
+      </Slider>
     </div>
   );
 };
@@ -33,4 +45,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps)(moviesBoxWrapper);
+export default connect(mapStateToProps)(MovieSlider);

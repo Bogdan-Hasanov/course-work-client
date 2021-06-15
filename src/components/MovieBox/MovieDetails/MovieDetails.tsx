@@ -32,12 +32,12 @@ const movieDetails = (props: MovieBoxProps) => {
   const handleOpen = () => {
     if (!movieDetails && props.show) {
       axios
-        .get<MovieDetailsModel>(`https://localhost:5001/Movie/GetMovieById/${encodeURIComponent(props.id)}`)
+        .get<MovieDetailsModel>(`http://178.150.48.202:5000/Movie/GetMovieById/${encodeURIComponent(props.id)}`)
         .then(response => {
           setMovieDetails(response.data);
         });
       axios
-        .get<UserInfo>(`https://localhost:5001/User`)
+        .get<UserInfo>(`http://178.150.48.202:5000/User`)
         .then(response => {
           setUserInfo(response.data as UserInfo);
         })
@@ -55,7 +55,7 @@ const movieDetails = (props: MovieBoxProps) => {
     if (userInfo != undefined) {
       if (userInfo.movieMarks == undefined) userInfo.movieMarks = {} as Record<string, number>;
       userInfo.movieMarks[props.id] = value ?? 0;
-      axios.put(`https://localhost:5001/User`, userInfo).then(() => console.log('mark was set'));
+      axios.put(`http://178.150.48.202:5000/User`, userInfo).then(() => console.log('mark was set'));
     }
   };
 

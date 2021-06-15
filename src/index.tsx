@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 import reducer from './store/reducers/reducer';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://localhost:5001';
+axios.defaults.baseURL = 'http://178.150.48.202:5000';
 axios.interceptors.request.use(function (config) {
   const token = store.getState().token;
   config.headers.Authorization = 'Bearer ' + token;
