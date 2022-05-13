@@ -13,7 +13,7 @@ const moviesBoxWrapper = (props: any) => {
     if (prevSearchTerm !== props.searchTerm) {
       setPrevSearchTerm(props.searchTerm);
       axios
-        .get<MovieModel[]>(`http://178.150.48.202:5000/Movie/SendSearch/${encodeURI(props.searchTerm)}`)
+        .get<MovieModel[]>(`/Movie/SendSearch/${encodeURI(props.searchTerm)}`)
         .then(response => setMovies(response.data));
     }
   });

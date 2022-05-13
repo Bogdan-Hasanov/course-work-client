@@ -2,14 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './store/reducers/reducer';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://178.150.48.202:5000';
+axios.defaults.baseURL = 'http://localhost:5000';
 axios.interceptors.request.use(function (config) {
   const token = store.getState().token;
   config.headers.Authorization = 'Bearer ' + token;
@@ -32,4 +31,3 @@ ReactDOM.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

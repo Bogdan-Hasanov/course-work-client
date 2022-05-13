@@ -1,20 +1,8 @@
 import './MovieDetails.scss';
 import React, { useEffect } from 'react';
 import MovieDetailsModel from '../../../Models/MovieDetails';
-import Rating, { IconContainerProps } from '@material-ui/lab/Rating';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Modal,
-  Radio,
-  RadioGroup,
-  Typography,
-} from '@material-ui/core';
+import Rating from '@material-ui/lab/Rating';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
 import axios from 'axios';
 import { UserInfo } from '../../../Models/UserInfo';
 
@@ -25,19 +13,16 @@ interface MovieBoxProps {
 }
 
 const movieDetails = (props: MovieBoxProps) => {
-  // const [open, setOpen] = React.useState(false);
   const [movieDetails, setMovieDetails] = React.useState<MovieDetailsModel>();
   const [userInfo, setUserInfo] = React.useState<UserInfo>();
 
   const handleOpen = () => {
     if (!movieDetails && props.show) {
+      axios.get<MovieDetailsModel>(`/Movie/GetMovieById/${encodeURIComponent(props.id)}`).then(response => {
+        setMovieDetails(response.data);
+      });
       axios
-        .get<MovieDetailsModel>(`http://178.150.48.202:5000/Movie/GetMovieById/${encodeURIComponent(props.id)}`)
-        .then(response => {
-          setMovieDetails(response.data);
-        });
-      axios
-        .get<UserInfo>(`http://178.150.48.202:5000/User`)
+        .get<UserInfo>(`/User`)
         .then(response => {
           setUserInfo(response.data as UserInfo);
         })
@@ -55,12 +40,14 @@ const movieDetails = (props: MovieBoxProps) => {
     if (userInfo != undefined) {
       if (userInfo.movieMarks == undefined) userInfo.movieMarks = {} as Record<string, number>;
       userInfo.movieMarks[props.id] = value ?? 0;
-      axios.put(`http://178.150.48.202:5000/User`, userInfo).then(() => console.log('mark was set'));
+      axios.put(`/User`, userInfo).then(() => console.log('mark was set'));
     }
   };
 
   const handleClose = (event: any) => {
-    if (event as React.MouseEvent<HTMLButtonElement, MouseEvent>) event.stopPropagation();
+    if (event as React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+      event.stopPropagation();
+    }
     props.setShow(false);
   };
 
