@@ -1,85 +1,62 @@
 import './Login.scss';
-import React, { useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import {
-  deleteResult,
-  storeResult,
-  decrement,
-  add,
-  subtract,
-  setLoggedIn,
-  setToken,
-} from '../../../store/actions/Actions';
-import { UserInfo } from '../../../Models/UserInfo';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLoggedIn } from '../../../store/selectors/authSelector';
+import { loginUser, registerUser } from '../../../store/operations/auth-operations';
+import { Credentials } from '../../../Models/Credentials';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
-const login = (props: any) => {
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [loginFailed, setLoginFailed] = useState(false);
-  const [registerSuccessful, setRegisterSuccessful] = useState(false);
-  const [messageWasShown, setMessageWasShown] = React.useState(true);
+const login = () => {
+  const [credential, setCredential] = useState<Credentials>({ username: '', password: '' });
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [open, setOpen] = React.useState(false);
 
-  const error = 'Login or password is invalid';
-  const register = 'Registration was successful';
-  const loginButtonHandler = (event: any) => {
-    return axios
-      .post('/Auth/Login', { username: username, password: password })
-      .then(r => {
-        props.setLoggedInState(true);
-        props.setToken(r.data.token);
-        setLoginFailed(false);
-        setRegisterSuccessful(false);
-      })
-      .catch(reason => setLoginFailed(true))
-      .finally(() => {
-        setMessageWasShown(false);
-      });
-  };
+  const dispatch = useDispatch();
+  const loggedIn = useSelector(getLoggedIn);
 
-  const onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      loginButtonHandler(null).then(() => console.log('logged in'));
+  const loginError = 'Login or password is invalid';
+  const registerError = 'Registration was successful';
+
+  const loginButtonHandler = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    const dispatchResult = await dispatch(loginUser(credential));
+    if (dispatchResult != null) {
+      setOpen(true);
+      setErrorMessage(loginError);
     }
   };
-
-  const handleAlert = (message: string) => {
-    if (!messageWasShown) {
-      alert(message);
-      setMessageWasShown(true);
+  const snackBarCloseHandler = (event?: React.SyntheticEvent | Event, reason?: string): void => {
+    if (reason === 'clickaway') {
+      return;
     }
+    setOpen(false);
+    setErrorMessage('');
   };
 
-  const registerButtonHandler = (event: any) => {
-    axios.post('/Auth/Register', { username: username, password: password, email: username + 'gmail.com' }).then(r => {
-      setLoginFailed(false);
-      setRegisterSuccessful(true);
-      loginButtonHandler(null)
-        .then(() => {
-          axios
-            .put('/User', { userId: username + 'gmail.com', movieMarks: {} } as UserInfo)
-            .then(r => console.log('r: ', r));
-        })
-        .catch(reason => setLoginFailed(true));
-      setMessageWasShown(false);
-    });
+  const registerButtonHandler = async () => {
+    const dispatchResult = await dispatch(registerUser(credential));
+    if (dispatchResult != null) {
+      setOpen(true);
+      setErrorMessage(registerError);
+    }
   };
   return (
     <div className="LoginWrapper">
-      {props.loggedIn ? (
-        <p>Logged in as {username}</p>
+      {loggedIn ? (
+        <p>Logged in as {credential.username}</p>
       ) : (
-        <div className="Login">
+        <form className="Login" onSubmit={loginButtonHandler}>
           <div className="Login__inputs">
             <TextField
               id="standard-basic"
               size="small"
               label="Username"
-              value={username}
+              value={credential.username}
               onChange={event => {
-                setUsername(event.target.value);
+                setCredential(prevState => ({ ...prevState, username: event.target.value }));
               }}
             />
             <TextField
@@ -87,11 +64,10 @@ const login = (props: any) => {
               label="Password"
               size="small"
               type="password"
-              value={password}
+              value={credential.password}
               onChange={event => {
-                setPassword(event.target.value);
+                setCredential(prevState => ({ ...prevState, password: event.target.value }));
               }}
-              onKeyUp={onKeyUp}
             />
           </div>
           <div className="Login__buttons">
@@ -100,8 +76,8 @@ const login = (props: any) => {
               variant="contained"
               color="primary"
               size="small"
+              type="submit"
               value="Login"
-              onClick={loginButtonHandler}
             >
               Login
             </Button>
@@ -115,32 +91,21 @@ const login = (props: any) => {
             >
               Register
             </Button>
+            <Snackbar
+              open={open}
+              autoHideDuration={6000}
+              onClose={snackBarCloseHandler}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              message={errorMessage}
+            >
+              <Alert onClose={snackBarCloseHandler} severity="error">
+                {errorMessage}
+              </Alert>
+            </Snackbar>
           </div>
-        </div>
+        </form>
       )}
-      {loginFailed ? handleAlert(error) : null}
-      {registerSuccessful ? handleAlert(register) : null}
     </div>
   );
 };
-
-const mapStateToProps = (state: any) => {
-  return {
-    token: state.token,
-    loggedIn: state.loggedIn,
-  };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setLoggedInState: (isLoggedIn: boolean) => dispatch(setLoggedIn(isLoggedIn)),
-    setToken: (token: string) => dispatch(setToken(token)),
-    onDecrementCounter: () => dispatch(decrement()),
-    onAdd: (val: any) => dispatch(add(val)),
-    onSub: (val: any) => dispatch(subtract(val)),
-    onStoreResult: (result: any) => dispatch(storeResult(result)),
-    onDeleteResult: (id: any) => dispatch(deleteResult(id)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(login);
+export default login;

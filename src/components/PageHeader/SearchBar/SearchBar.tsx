@@ -1,16 +1,18 @@
 import './SearchBar.scss';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSearchTerm } from '../../../store/actions/Actions';
 import { Alert } from '@material-ui/lab';
-import { Snackbar, SnackbarCloseReason } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 
-const searchBar = (props: any) => {
+const searchBar = () => {
   const regExp = /[a-zA-Z]/g;
 
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const dispatch = useDispatch();
+
   const validateSearchTerm = (term: string): void => {
     if (term.length < 2) {
       setOpen(true);
@@ -19,24 +21,21 @@ const searchBar = (props: any) => {
     }
     if (!regExp.test(term)) {
       setOpen(true);
-      setErrorMessage('The term must contain letters');
+      setErrorMessage('The term must contain latin letters');
       return;
     }
-    props.setSearchTerm(term);
+    dispatch(setSearchTerm(term));
   };
   const onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       validateSearchTerm((event.target as HTMLInputElement).value);
     }
   };
-  const snackBarCloseHandler = (event: SyntheticEvent<any, Event>, reason: SnackbarCloseReason): void => {
+  const snackBarCloseHandler = (event?: React.SyntheticEvent | Event, reason?: string): void => {
     if (reason === 'clickaway') {
       return;
     }
-    setErrorMessage('');
     setOpen(false);
-  };
-  const alertCloseHandler = (): void => {
     setErrorMessage('');
   };
   return (
@@ -53,23 +52,11 @@ const searchBar = (props: any) => {
         onClose={snackBarCloseHandler}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert onClose={alertCloseHandler} severity="error">
+        <Alert onClose={snackBarCloseHandler} severity="error">
           {errorMessage}
         </Alert>
       </Snackbar>
     </div>
   );
 };
-
-const mapStateToProps = (state: any) => {
-  return {
-    searchTerm: state.searchTerm,
-  };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setSearchTerm: (searchTerm: string) => dispatch(setSearchTerm(searchTerm)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(searchBar);
+export default searchBar;

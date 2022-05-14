@@ -1,40 +1,4 @@
-import {
-  ADD,
-  DECREMENT,
-  INCREMENT,
-  SUBTRACT,
-  STORE_RESULT,
-  DELETE_RESULT,
-  SET_TOKEN,
-  LOGIN,
-  SET_SEARCH_TERM,
-} from './actionTypes';
-
-export const increment = () => {
-  return {
-    type: INCREMENT,
-  };
-};
-
-export const decrement = () => {
-  return {
-    type: DECREMENT,
-  };
-};
-
-export const add = (val: any) => {
-  return {
-    type: ADD,
-    payload: val,
-  };
-};
-
-export const subtract = (val: any) => {
-  return {
-    type: SUBTRACT,
-    payload: val,
-  };
-};
+import { STORE_RESULT, DELETE_RESULT, SET_SEARCH_TERM, LOGIN_USER_AND_SET_TOKEN } from './actionTypes';
 
 export const saveResult = (val: any) => {
   return {
@@ -58,19 +22,27 @@ export const deleteResult = (val: any) => {
   };
 };
 
-export const setToken = (token: string) => {
+export const loginUserAndSetToken = (token: string, loggedIn: boolean) => {
   return {
-    type: SET_TOKEN,
+    type: LOGIN_USER_AND_SET_TOKEN,
     token: token,
-  };
-};
-
-export const setLoggedIn = (loggedIn: boolean) => {
-  return {
-    type: LOGIN,
     loggedIn: loggedIn,
   };
 };
+
+// export const setToken = (token: string) => {
+//   return {
+//     type: SET_TOKEN,
+//     token: token,
+//   };
+// };
+//
+// export const setLoggedIn = (loggedIn: boolean) => {
+//   return {
+//     type: SET_LOGIN,
+//     loggedIn: loggedIn,
+//   };
+// };
 
 export const setSearchTerm = (searchTerm: string) => {
   return {
