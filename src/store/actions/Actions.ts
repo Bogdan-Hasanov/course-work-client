@@ -1,4 +1,5 @@
-import { STORE_RESULT, DELETE_RESULT, SET_SEARCH_TERM, LOGIN_USER_AND_SET_TOKEN } from './actionTypes';
+import { STORE_RESULT, DELETE_RESULT, SET_SEARCH_TERM, LOGIN_USER_AND_SET_TOKEN, SET_USER_INFO } from './actionTypes';
+import { UserInfo } from '../../Models/UserInfo';
 
 export const saveResult = (val: any) => {
   return {
@@ -30,23 +31,16 @@ export const loginUserAndSetToken = (token: string, loggedIn: boolean) => {
   };
 };
 
-// export const setToken = (token: string) => {
-//   return {
-//     type: SET_TOKEN,
-//     token: token,
-//   };
-// };
-//
-// export const setLoggedIn = (loggedIn: boolean) => {
-//   return {
-//     type: SET_LOGIN,
-//     loggedIn: loggedIn,
-//   };
-// };
-
 export const setSearchTerm = (searchTerm: string) => {
   return {
     type: SET_SEARCH_TERM,
     searchTerm: searchTerm,
+  };
+};
+
+export const setUserInfo = (userInfo: UserInfo) => {
+  return {
+    type: SET_USER_INFO,
+    userInfo: userInfo,
   };
 };

@@ -1,17 +1,23 @@
 import * as Actions from '../actions/actionTypes';
+import { UserInfo } from '../../Models/UserInfo';
+import { MovieSession } from '../../Models/MovieSession';
 
 export interface AppStore {
   results: any[];
   loggedIn: boolean;
-  token: null;
+  token: string;
   searchTerm: string;
+  userInfo: UserInfo | undefined;
+  sessions: MovieSession[];
 }
 
 const initialState: AppStore = {
+  sessions: [],
   results: [],
   loggedIn: false,
-  token: null,
+  token: '',
   searchTerm: 'fall',
+  userInfo: undefined,
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -55,6 +61,12 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         searchTerm: action.searchTerm,
+      };
+    }
+    case Actions.SET_USER_INFO: {
+      return {
+        ...state,
+        userInfo: action.userInfo,
       };
     }
     default:

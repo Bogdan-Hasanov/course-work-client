@@ -1,0 +1,55 @@
+.movie-layout{
+    flex-wrap: nowrap;
+}
+.col-md-2{
+    padding: 0px 1px;
+}
+.col-md-6{
+    padding: 0 25px;
+}
+.seat-row{
+    flex: 0 0 5%;
+}
+.seat{
+    width: 20px;
+    height: 20px;
+    border-radius: 50% 50% 0px 0px;
+    text-align: center;
+    font-family: Roboto, ui-sans-serif;
+    margin: 3px;
+    cursor: pointer;
+}
+.seat:hover{
+    transform: scale(1.1);
+}
+.row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.column-seat{
+    padding: 0 2px;
+}
+.seat-grey{
+    background-color: #ddd;
+}
+.seat-green{
+    background-color: forestgreen;
+}
+.seat-black{
+    background-color: darkblue;
+    color: whitesmoke;
+}
+.seat-undefined{
+    cursor: auto;
+    pointer-events: none;
+}
+.movie-complex p{
+    text-align: center;
+    font-size: 20px;
+}
+.movie-selector{
+    width: 250px;
+}

@@ -5,14 +5,14 @@ import AppHeader from './components/PageHeader/Header';
 
 function App() {
   return (
-    <div>
+    <>
       <header className="App-header">
         <AppHeader />
       </header>
       <body>
         <MoviesBoxWrapper />
       </body>
-    </div>
+    </>
   );
 }
 

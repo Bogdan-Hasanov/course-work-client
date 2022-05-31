@@ -17,8 +17,8 @@ const login = () => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(getLoggedIn);
 
-  const loginError = 'Login or password is invalid';
-  const registerError = 'Registration was successful';
+  const loginError = 'Логін чи пароль невірний';
+  const registerError = 'Помилка реєстрації';
 
   const loginButtonHandler = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -86,10 +86,10 @@ const login = () => {
               variant="contained"
               color="primary"
               size="small"
-              value="Login"
+              value="RegisterCustomer"
               onClick={registerButtonHandler}
             >
-              Register
+              Register as customer
             </Button>
             <Snackbar
               open={open}

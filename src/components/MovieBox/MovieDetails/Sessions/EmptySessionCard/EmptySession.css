@@ -1,0 +1,9 @@
+.EmptySessionCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 20px 0;
+    border: 1px solid black;
+}
+.svg_icons {
+}
